@@ -1,0 +1,10 @@
+.env
+logs/*.csv
+__pycache__/
+*/__pycache__/
+.vscode/
+senv/
+package.json
+package-lock.json
+node_modules/
+static/src/

@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+     <meta charset="UTF-8">
+     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+     <link rel="stylesheet" href="{{ url_for('static', filename='dashboard.css') }}">
+     <link rel="stylesheet" href="{{ url_for('static', filename='base.css') }}">
+
+     <link rel="stylesheet" href="{{ url_for('static', filename='dist/output.css') }}">
+
+     <!--
+     <script src="https://cdn.tailwindcss.com"></script>
+     <script type="module" src="https://cdn.jsdelivr.net/npm/@tailwindplus/elements"></script>
+     -->
+     <title class="text-size-[3rem]">BNPI IPFS Data Storage</title>
+
+
+</head>
+<body class="min-h-screen">
+     <div class="flex flex-col w-full px-4 py-4">
+          <header class="flex items-center justify-between mb-4 border-b border-slate-700 pb-3">
+               <div class="flex items-center gap-3">
+                    <h1 class="text-size font-bold">BNPI IPFS Data Storage</h1>
+               </div>
+               <div class="flex items-center gap-2">
+                         <label class="btn-ghost cursor-pointer" >
+                              <input type="button" class="hidden" onclick="location.href='{{ url_for('logout') }}'"/>
+                              <span class="text-xl font-bold">Logout</span>
+                         </label>
+               </div>
+          </header>
+
+          <div class="flex flex-col gap-4 mb-4 h-auto md:h-[30rem] md:flex-row">
+               <div class="mb-2 w-full md:w-[16rem]">
+                    <div class="card p-5 h-auto md:h-[30rem]">
+                         <h3 class="text-size-[1.5rem] font-bold m-3">Upload</h3>
+
+                         <!-- Upload File -->
+                         <div>
+                              <form id="uploadFrom" class="flex flex-col gap-3 items-start"  method="post" enctype="multipart/form-data" >
+                                   <input id="fileInput" class="sr-only" type="file" name="file" required/>
+                                   <label id="fileName" for="fileInput" class="btn-ghost w-full truncate cursor-pointer">Choose File</label>
+                                   <input id="uploadButton" class="btn-ghost w-full disabled:opacity-40 disabled:cursor-not-allowed" type="submit" value="Upload" disabled>
+                              </form>
+                         </div>
+                         <!-- Download -->
+                         <h3 class="text-size-[1.5rem] font-bold m-3">Download</h3>
+
+                         <div class="mt-3">
+                              <button id="downloadSelected" class="btn-ghost w-full p-3 truncate disabled:opacity-40 disabled:cursor-not-allowed" disabled>Download Selected</button>
+                         </div>
+                         <!-- Share File -->
+                         <h3 class="text-size-[1.5rem] font-bold m-3">Share</h3>
+                         <div>
+                              <form id="shareForm" class="flex flex-col gap-3 items-start"  method="get" >
+                                   <div class="w-full input-text">
+                                        <input id="addressReceiver" class="fill-box w-full focus:outline-none focus:ring-0 " type="text" name="address" placeholder="Receiver address" required/>
+                                   </div>
+                                   <div class="w-full input-text">
+                                        <input id="message" class="fill-box w-full focus:outline-none focus:ring-0" type="text" name="message" placeholder="Message" />
+                                   </div>
+
+                                   <input id="shareButton" class="btn-ghost w-full disabled:opacity-40 disabled:cursor-not-allowed" type="submit" value="Share" disabled>
+                              </form>
+
+                         </div>
+                    </div>
+
+
+               </div>
+               <!-- Stored File  -->
+               <div class="w-full md:w-[calc(100%-16rem)] mb-2">
+                    <div class="card p-5 h-[20rem] md:h-[30rem] flex flex-col">
+                         <div class="flex flex-row items-center justify-between mb-3 gap-4">
+                              <h1 class="text-size-[1.5rem] font-bold">Stored File</h1>
+                              <p id="selectedDownloadLabel" class="text-sm text-slate-400 mb-2">Select a file to enable download.</p>
+
+
+                         </div>
+                         <div id="box" class="card-inner flex-1 pd-5 overflow-auto [&::-webkit-scrollbar]:opacity-40 [-ms-overflow-style:none] [scrollbar-width:none]">
+                         </div>
+                    </div>
+
+               </div>
+          </div>
+
+
+
+          <div class="flex flex-col min-h-[20rem] mb-4 md:flex-row gap-4">
+                    <div class="card p-5 w-full h-[20rem] flex flex-col mb-3">
+                         <div class="flex flex-row items-center">
+                              <h3 class="section-title m-3 w-[15rem]">Send History</h3>
+
+                                   <div class="relative w-full flex justify-end " id="customSelect">
+                                        <button id="selectButton"class=" w-[12rem] truncate flex justify-between transition-colors  btn-addr">
+                                        <span class="justify-self-start text-left" id="selectedValue" data-value="Address">Address</span>
+                                        <svg
+                                             id="chevronIcon"
+                                             class="w-4 h-4 transition-transform justify-self-end align-ends"
+                                             fill="none"
+                                             stroke="currentColor"
+                                             viewBox="0 0 24 24"
+                                        >
+                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                                        </svg>
+                                        </button>
+
+                                        <div id="dropdownMenu" class="dropdown-menu absolute w-[12rem] mt-[2.75rem] border border-slate-700 rounded-lg shadow-xl z-10 max-h-[8rem] overflow-auto [&::-webkit-scrollbar]:opacity-40 [-ms-overflow-style:none] [scrollbar-width:none]">
+
+                                        </div>
+                              </div>
+
+                         </div>
+                         <!-- history-->
+                         <div id="history" class="card-inner flex-1 h-full pd-5 overflow-y-scroll [&::-webkit-scrollbar]:opacity-40 [-ms-overflow-style:none] [scrollbar-width:none]">
+                         </div>
+
+                    </div>
+
+                    <div class="card p-5 w-full h-[20rem] flex flex-col">
+                         <h3 class="section-title mb-3">Status</h3>
+                         <div class="card-inner flex-1 pd-5 overflow-y-scroll [&::-webkit-scrollbar]:opacity-40 [-ms-overflow-style:none] [scrollbar-width:none]">
+                              <!-- Log-->
+                               <div id="log" class="m-5" ></div>
+                         </div>
+                    </div>
+
+
+
+          </div>
+
+
+
+
+          <footer class="mt-auto border-t border-slate-700 pt-3 ">
+               <div class="p-5">
+                    <span>Alan Ghani Haris | Tugas Akhir Program Studi Electronika dan Instrumentasi</span><br>
+                    <span>22/497605/PA/21433</span>
+               </div>
+          </footer>
+     </div>
+
+
+
+     <script type="module" src="{{ url_for('static', filename='dist/elements.js') }}"></script>
+
+     <script src="{{ url_for('static', filename='fileaccess.js') }}"></script>
+
+
+</body>
+</html>

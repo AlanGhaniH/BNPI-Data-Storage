@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+     <meta charset="UTF-8">
+     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+     <!--
+     <script src="https://cdn.tailwindcss.com"></script> 
+     -->
+
+     <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+     <link rel="stylesheet" href="{{ url_for('static', filename='base.css') }}">
+     <link rel="stylesheet" href="{{ url_for('static', filename='dist/output.css') }}">
+
+
+
+     <title>BNPI IPFS Data Storage</title>
+     
+
+</head>
+<body class="min-h-screen">
+     <div class="flex flex-col items-center w-full px-4 py-4">
+          <header class="flex items-center justify-between mb-4 border-b border-slate-700 pb-3">
+                    <div class="flex items-center gap-3">
+                         <h1 class="text-size font-bold">BNPI IPFS Data Storage</h1>
+                    </div>    
+
+          </header>
+          <div class="flex flex-col gap-4 w-[13rem] mb-4 h-auto md:h-[35rem] md:flex-row">
+               <div class="flex flex-col w-[13rem] gap-3 items-start items-center">
+
+                    <form class="w-[13rem]" action="/login_submit" method="POST">
+                         <!-- <label class="text-md" for="address">Address:</label><br> -->
+                         <input class="input-text h-[2.25rem] w-full mb-2" type="text" id="address" name="address" placeholder="address" required><br>
+                         <!-- <label class="text-md" for="private_key">Private Key:</label><br> -->
+                         <input class="input-text  h-[2.25rem] w-full" type="password" id="private_key" name="private_key" placeholder="private key" required><br>
+                         <input class="mt-[1rem] btn-ghost w-[13rem] text-size " type="submit" value="Masuk">
+                    </form>
+                    <p>Tidak punya akun?<a href="{{ url_for('signup') }}" class="text-blue-500 hover:underline">Daftar</a></p><br>
+                    
+                    <!-- Error flashing-->
+                    {% with messages = get_flashed_messages() %}
+                         {% if messages %}
+                              <ul>
+                              {% for message in messages %}
+                                   <p class="text-md">{{ message }} </p>
+                              {% endfor %}
+                              </ul>
+                         {% endif %}
+                    {% endwith %}
+
+
+               </div>
+          </div>
+     </div>
+
+
+
+     
+</body>
+</html>
